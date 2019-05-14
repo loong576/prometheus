@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  node-exporter:
+    image: prom/node-exporter:latest
+    network_mode: 'host'
+    container_name: node-exporter
+    restart: unless-stopped
+    ports:
+      - '9100:9100'
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc
+      - /sys:/host/sys
+      - /:/rootfs
+
+  cadvisor:
+    image: google/cadvisor:latest
+    network_mode: 'host'
+    container_name: cadvisor
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro

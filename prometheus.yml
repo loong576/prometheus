@@ -1,0 +1,12 @@
+global:             # 全局设置，可以被覆盖
+  scrape_interval: 15s              # 抓取采样数据的时间间隔，每15秒去被监控机上采样，即数据采集频率
+  evaluation_interval: 15s          # 监控数据规则的评估频率，比如设置文件系统使用率>75%发出告警则每15秒执行一次该规则，进行文件系统检查
+  external_labels:              # 与外部通信时用的外部标签
+    monitor: 'nodecontainer-monitor'
+
+scrape_configs:             # 抓取配置
+  - job_name: 'prometheus'              # 任务名，全局唯一
+    scrape_interval: 5s             # 本任务的抓取间隔，覆盖全局配置
+    static_configs:             # 静态目标配置
+      # 抓取地址，路径为默认的/metrics
+      - targets: ['localhost:9090','localhost:8080','localhost:9100','172.27.9.75:8080','172.27.9.75:9100']
